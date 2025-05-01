@@ -1,14 +1,31 @@
 import React,{useState,useEffect} from 'react'
-import TaskForm from './components/TaskForm'
+
 import TaskList from './components/TaskList'
 import { fetchTasks } from './api/api'
+import Navbar from './components/Navbar'
 const App = () => {
   const [tasks,setTasks]=useState([]);
 
-  const loadTasks= async () =>{
-    const {data}= await fetchTasks();
-    setTasks(data);
-  }
+  const loadTasks = async () => {
+    try {
+      const { data } = await fetchTasks();
+  
+      // Validate the fetched data before setting it to state
+      if (Array.isArray(data)) {
+        // Filter out any invalid tasks (based on your criteria, e.g., missing fields)
+       
+  
+        // Set the valid tasks to state
+        setTasks(data);
+      } else {
+        console.error("Fetched data is not an array:", data);
+      }
+    } catch (error) {
+      console.error("Error fetching tasks:", error);
+      // Optionally set an error state if needed
+    }
+  };
+  
 
   useEffect(()=>{
     loadTasks();
@@ -16,9 +33,9 @@ const App = () => {
 
   return (
     <div>
-     <h1>Task Manager App</h1>
-     <TaskForm refreshTasks={loadTasks}/>
-     <TaskList tasks={tasks} refreshTasks={loadTasks}/> 
+    <Navbar/>
+   
+     <TaskList tasks={tasks} setTasks={setTasks}/> 
     </div>
   )
 }
