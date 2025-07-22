@@ -9,7 +9,10 @@ const app=express();
 
 //Middleware
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+   origin: 'https://mern-frontend-y889.onrender.com', // Replace after deployment
+   credentials: true
+ }));
 
 //Routes
 app.use('/tasks',Taskroutes) // assigns the handling of all the routes with /tasks to the Taskroutes
